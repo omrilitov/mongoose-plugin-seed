@@ -1,0 +1,48 @@
+{
+  "name": "mongoose-plugin-seed",
+  "version": "0.0.1",
+  "description": "Mongoose plugin to seed your models",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "gulp build"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "gulp eslint"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omrilitov/mongoose-plugin-seed"
+  },
+  "keywords": [
+    "mongoose",
+    "plugin",
+    "seed"
+  ],
+  "author": {
+    "name": "Omri Litov",
+    "email": "omrilitov@gmail.com",
+    "url": "https://github.com/omrilitov"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/omrilitov/mongoose-plugin-seed/issues"
+  },
+  "homepage": "https://github.com/omrilitov/mongoose-plugin-seed",
+  "devDependencies": {
+    "babel-core": "^6.3.26",
+    "babel-eslint": "^4.1.6",
+    "babel-preset-es2015": "^6.3.13",
+    "eslint-config-noamokman": "^1.0.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-eslint": "^1.1.1",
+    "gulp-if": "^2.0.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "run-sequence": "^1.1.5"
+  },
+  "dependencies": {
+    "dependency-graph": "^0.4.1"
+  }
+}

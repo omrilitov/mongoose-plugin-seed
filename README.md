@@ -1,0 +1,1 @@
+# mongoose-plugin-seed
