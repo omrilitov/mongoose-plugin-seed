@@ -1,6 +1,6 @@
 {
   "name": "mongoose-plugin-seed",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Mongoose plugin to seed your models",
   "main": "lib/index.js",
   "scripts": {
