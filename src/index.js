@@ -2,15 +2,15 @@
 
 import {DepGraph} from 'dependency-graph';
 
-const dependencies = {};
+const schemasDependencies = {};
 
 const getSchemasOrder = () => {
   const graph = new DepGraph();
 
-  Object.keys(dependencies).forEach(schema => graph.addNode(schema));
+  Object.keys(schemasDependencies).forEach(schema => graph.addNode(schema));
 
-  Object.keys(dependencies).forEach(schema => {
-    dependencies[schema].forEach(dep => graph.addDependency(schema, dep));
+  Object.keys(schemasDependencies).forEach(schema => {
+    schemasDependencies[schema].forEach(dep => graph.addDependency(schema, dep));
   });
 
   return graph.overallOrder();
@@ -25,7 +25,7 @@ export function plugin (schema, {model, seed, dependencies = []}) {
       });
   };
 
-  dependencies[model] = dependencies;
+  schemasDependencies[model] = dependencies;
 }
 
 export function seed (mongoose) {
@@ -35,7 +35,7 @@ export function seed (mongoose) {
   return Promise.all(order.map(name => {
     const Model = mongoose.model(name);
 
-    seeds[name] = Promise.all(dependencies[name].map(dep => seeds[dep]))
+    seeds[name] = Promise.all(schemasDependencies[name].map(dep => seeds[dep]))
       .then(deps => Model.seed(deps));
 
     return seeds[name];
