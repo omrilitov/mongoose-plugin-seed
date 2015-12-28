@@ -16,7 +16,7 @@ const getSchemasOrder = () => {
   return graph.overallOrder();
 };
 
-export function plugin (schema, {model, seed, dependencies = []}) {
+export function plugin (schema, {model, seed, dependencies = []} = {}) {
   // No arrow function so `this` will be the model
   schema.statics.seed = function (deps) {
     return this.remove({}).exec()
