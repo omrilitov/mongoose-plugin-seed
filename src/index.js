@@ -21,7 +21,7 @@ export function plugin (schema, {model, seed, dependencies = []} = {}) {
   schema.statics.seed = function (deps) {
     return this.remove({}).exec()
       .then(() => {
-        return this.create(seed.apply(null, deps));
+        return this.create(seed(...deps));
       });
   };
 
