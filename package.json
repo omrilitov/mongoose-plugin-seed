@@ -34,15 +34,25 @@
     "babel-core": "^6.3.26",
     "babel-eslint": "^4.1.6",
     "babel-preset-es2015": "^6.3.13",
+    "chai": "^3.4.1",
+    "chai-as-promised": "^5.2.0",
     "eslint-config-noamokman": "^1.0.1",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
+    "gulp-babel-istanbul": "^0.11.0",
+    "gulp-coveralls": "^0.1.4",
     "gulp-eslint": "^1.1.1",
     "gulp-if": "^2.0.0",
+    "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
-    "run-sequence": "^1.1.5"
+    "merge-stream": "^1.0.0",
+    "mongoose": "^4.3.4",
+    "run-sequence": "^1.1.5",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0"
   },
   "dependencies": {
-    "dependency-graph": "^0.4.1"
+    "dependency-graph": "^0.4.1",
+    "pinkie-promise": "^2.0.0"
   }
 }

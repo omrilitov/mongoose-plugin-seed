@@ -7,7 +7,7 @@ import gulpIf from 'gulp-if';
 const isFixed = file => file.eslint && file.eslint.fixed;
 
 export default gulp => {
-  gulp.task('eslint', ['eslint:src', 'eslint:gulp']);
+  gulp.task('eslint', ['eslint:src', 'eslint:gulp', 'eslint:test']);
 
   gulp.task('eslint:src', () => {
     return gulp.src(config.paths.src)
@@ -15,6 +15,14 @@ export default gulp => {
       .pipe(eslint.format())
       .pipe(eslint.failAfterError())
       .pipe(gulpIf(isFixed, gulp.dest('src')));
+  });
+
+  gulp.task('eslint:test', () => {
+    return gulp.src(config.paths.test)
+      .pipe(eslint({fix: true}))
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError())
+      .pipe(gulpIf(isFixed, gulp.dest('test')));
   });
 
   gulp.task('eslint:gulp', () => {
