@@ -22,7 +22,7 @@ Mongoose plugin to seed your models
         <a href="https://ci.appveyor.com/project/omrilitov/mongoose-plugin-seed"><img src="https://img.shields.io/appveyor/ci/omrilitov/mongoose-plugin-seed.svg?style=flat-square"></a>
       </td>
       <td align="center">
-<a href='https://coveralls.io/r/omrilitov/movie-list'><img src='https://img.shields.io/coveralls/omrilitov/mongoose-plugin-seed.svg?style=flat-square' alt='Coverage Status' /></a>
+<a href='https://coveralls.io/r/omrilitov/mongoose-plugin-seed'><img src='https://img.shields.io/coveralls/omrilitov/mongoose-plugin-seed.svg?style=flat-square' alt='Coverage Status' /></a>
       </td>
       <td align="center">
         <a href="https://david-dm.org/omrilitov/mongoose-plugin-seed"><img src="https://img.shields.io/david/omrilitov/mongoose-plugin-seed.svg?style=flat-square"></a>
