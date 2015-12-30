@@ -4,7 +4,9 @@
   "description": "Mongoose plugin to seed your models",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "gulp build"
+    "prepublish": "gulp build",
+    "test": "gulp test",
+    "coveralls": "gulp coveralls"
   },
   "config": {
     "ghooks": {
