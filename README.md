@@ -2,6 +2,38 @@
 
 Mongoose plugin to seed your models
 
+<table>
+  <thead>
+    <tr>
+      <th>Linux</th>
+      <th>OSX</th>
+      <th>Windows</th>
+      <th>Coverage</th>
+      <th>Dependencies</th>
+      <th>DevDependencies</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2" align="center">
+        <a href="https://travis-ci.org/omrilitov/mongoose-plugin-seed"><img src="https://img.shields.io/travis/omrilitov/mongoose-plugin-seed.svg?style=flat-square"></a>
+      </td>
+      <td align="center">
+        <a href="https://ci.appveyor.com/project/omrilitov/mongoose-plugin-seed"><img src="https://img.shields.io/appveyor/ci/omrilitov/mongoose-plugin-seed.svg?style=flat-square"></a>
+      </td>
+      <td align="center">
+<a href='https://coveralls.io/r/omrilitov/movie-list'><img src='https://img.shields.io/coveralls/omrilitov/mongoose-plugin-seed.svg?style=flat-square' alt='Coverage Status' /></a>
+      </td>
+      <td align="center">
+        <a href="https://david-dm.org/omrilitov/mongoose-plugin-seed"><img src="https://img.shields.io/david/omrilitov/mongoose-plugin-seed.svg?style=flat-square"></a>
+      </td>
+      <td align="center">
+        <a href="https://david-dm.org/omrilitov/mongoose-plugin-seed#info=devDependencies"><img src="https://img.shields.io/david/dev/omrilitov/mongoose-plugin-seed.svg?style=flat-square"/></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 ## Overview
 
 This module will seed your Mongoose models while using dependency management between them.
@@ -15,18 +47,20 @@ It will empty the collection and create the new given data.
 ## Examples
 
 ```js
-var seedPlugin = require('mongoose-plugin-seed').plugin;
-var mongooseSeed = require('mongoose-plugin-seed').seed;
+const addSeed = require('mongoose-plugin-seed').addSeed;
+const mongooseSeed = require('mongoose-plugin-seed').seed;
 
 // Define Schemas
 var UserSchema = new Schema({...});
 var RoleSchema = new Schema({...});
 
-// Define users seed with dependency to roles
-UserSchema
-  .plugin(seedPlugin, {
-    model: 'User',
-    dependencies: ['Role'],
+// Define Models
+var User = mongoose.model('User', UserSchema);
+var Role = mongoose.model('Role', RoleSchema);
+
+// Define the seed with dependency to roles
+addSeed(User, {
+    dependencies: [Role],
     seed: function (roles) {
       return [{
         username: "foo",
@@ -41,9 +75,7 @@ UserSchema
   });
 
 // Define roles seed
-RoleSchema
-  .plugin(seedPlugin, {
-    model: 'Role',
+addSeed(Role, {
     seed: function () {
       return [{
         name: "admin"
@@ -62,16 +94,17 @@ mongooseSeed()
 
 ## API
 
-### plugin
+### addSeed
 
 ```js
-var seedPlugin = require('mongoose-plugin-seed').plugin;
-Schema.plugin(seedPlugin, options);
+var addSeed = require('mongoose-plugin-seed').addSeed;
+addSeed(Model, options);
 ```
+
+ - `Model` - The mongoose model to seed
 
 The plugin uses the following options:
 
- - `model` - name of the current model
  - `seed` - function that returns the seed data (using required dependencies)
  - `dependencies (optional)` - dependencies to seed the data
  
