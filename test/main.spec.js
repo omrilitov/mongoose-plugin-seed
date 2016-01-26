@@ -2,28 +2,45 @@
 
 import chai from 'chai';
 import sinon from 'sinon';
+import mockery from 'mockery';
 import Promise from 'pinkie-promise';
-import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+const Schema = () => {};
 const expect = chai.expect;
 
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('mongoose-plugin-seed', () => {
-  const mockModel = Model => {
-    const execStub = sinon.stub().returns(Promise.resolve());
-
-    Model.create = sinon.stub().returnsArg(0);
-    Model.remove = sinon.stub().returns({exec: execStub});
-
-    return Model;
+  const execStub = sinon.stub().returns(Promise.resolve());
+  const modelMock = name => {
+    return {
+      modelName: name,
+      create: sinon.stub().returnsArg(0),
+      remove: sinon.stub().returns({exec: execStub})
+    };
   };
+
+  mockery.registerMock('mongoose', {
+    model: modelMock
+  });
+
+  mockery.enable({
+    useCleanCache: true,
+    warnOnReplace: false,
+    warnOnUnregistered: false
+  });
+
   const mongooseSeed = require('../src');
+
+  after(() => {
+    mockery.deregisterMock('mongoose');
+    mockery.disable();
+  });
 
   describe('exports', () => {
     it('should expose a function', () => {
       expect(mongooseSeed.addSeed).to.be.a('function');
+      expect(mongooseSeed.createSeedModel).to.be.a('function');
       expect(mongooseSeed.seed).to.be.a('function');
     });
   });
@@ -55,6 +72,22 @@ describe('mongoose-plugin-seed', () => {
     });
   });
 
+  describe('createSeedModel', () => {
+    describe('should fail', () => {
+      it('without name', () => {
+        expect(() => mongooseSeed.createSeedModel()).to.throw(TypeError, 'mongoose-plugin-seed: name must be provided');
+      });
+
+      it('with name as an object', () => {
+        expect(() => mongooseSeed.createSeedModel({})).to.throw(TypeError, 'mongoose-plugin-seed: name must be a string');
+      });
+
+      it('without Schema', () => {
+        expect(() => mongooseSeed.createSeedModel('asd')).to.throw(TypeError, 'mongoose-plugin-seed: Schema must be provided');
+      });
+    });
+  });
+
   describe('seed (a->b->c)', () => {
     const ASchema = new Schema({
       name: String
@@ -68,31 +101,31 @@ describe('mongoose-plugin-seed', () => {
       name: String
     });
 
-    const AModel = mockModel(mongoose.model('A', ASchema));
-    const BModel = mockModel(mongoose.model('B', BSchema));
-    const CModel = mockModel(mongoose.model('C', CSchema));
-
     const AData = [{name: 'Hello'}];
     const BData = [{name: 'Hello'}];
     const CData = [{name: 'Hello'}];
 
-    const ASeed = {
-      dependencies: [BModel, CModel],
-      seed: sinon.stub().returns(Promise.resolve(AData))
+    const CSeed = {
+      seed: sinon.stub().returns(Promise.resolve(CData))
     };
+
+    const CModel = modelMock('C', CSchema);
 
     const BSeed = {
       dependencies: [CModel],
       seed: sinon.stub().returns(Promise.resolve(BData))
     };
 
-    const CSeed = {
-      seed: sinon.stub().returns(Promise.resolve(CData))
+    const BModel = modelMock('B', BSchema);
+
+    const ASeed = {
+      dependencies: [BModel, CModel],
+      seed: sinon.stub().returns(Promise.resolve(AData))
     };
 
-    mongooseSeed.addSeed(AModel, ASeed);
-    mongooseSeed.addSeed(BModel, BSeed);
     mongooseSeed.addSeed(CModel, CSeed);
+    mongooseSeed.addSeed(BModel, BSeed);
+    mongooseSeed.createSeedModel('A', ASchema, ASeed);
 
     before(cb => {
       mongooseSeed.seed()

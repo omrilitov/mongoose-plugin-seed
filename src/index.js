@@ -1,6 +1,7 @@
 'use strict';
 
 import {DepGraph} from 'dependency-graph';
+import mongoose from 'mongoose';
 import Promise from 'pinkie-promise';
 
 const models = {};
@@ -43,6 +44,24 @@ export function addSeed (Model, {seed, dependencies = []} = {}) {
 
   models[Model.modelName] = Model;
   info[Model.modelName] = {dependencies: dependencies.map(model => model.modelName), seed};
+}
+
+export function createSeedModel (name, Schema, opts) {
+  if (!name) {
+    throw new TypeError('mongoose-plugin-seed: name must be provided');
+  }
+  else if (typeof name !== 'string') {
+    throw new TypeError('mongoose-plugin-seed: name must be a string');
+  }
+  else if (!Schema) {
+    throw new TypeError('mongoose-plugin-seed: Schema must be provided');
+  }
+
+  const Model = mongoose.model(name, Schema);
+
+  addSeed(Model, opts);
+
+  return Model;
 }
 
 export function seed () {

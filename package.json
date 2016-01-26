@@ -49,6 +49,7 @@
     "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
     "merge-stream": "^1.0.0",
+    "mockery": "^1.4.0",
     "mongoose": "^4.3.4",
     "run-sequence": "^1.1.5",
     "sinon": "^1.17.2",
@@ -56,6 +57,7 @@
   },
   "dependencies": {
     "dependency-graph": "^0.4.1",
+    "mongoose": "^4.3.7",
     "pinkie-promise": "^2.0.0"
   }
 }
