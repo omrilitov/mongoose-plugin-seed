@@ -108,6 +108,24 @@ The plugin uses the following options:
  - `seed` - function that returns the seed data (using required dependencies)
  - `dependencies (optional)` - dependencies to seed the data
  
+### createSeedModel
+
+```js
+var createSeedModel = require('mongoose-plugin-seed').createSeedModel;
+createSeedModel(name, Schema, options);
+```
+
+ - `name` - The name to give to the mongoose model
+ - `Schema` - The mongoose schema to create and seed
+ - `options` - Same options as the addSeed API
+
+This function returns the created model.
+It is just a short for
+```js
+var Model = mongoose.model(name, Schema);
+addSeed(Model, options);
+```
+
 ### seed
 
 ```js
