@@ -107,6 +107,7 @@ The plugin uses the following options:
 
  - `seed` - function that returns the seed data (using required dependencies)
  - `dependencies (optional)` - dependencies to seed the data
+ - `drop (default=false)` - should drop existing collection instead of removing all documents
  
 ### createSeedModel
 
