@@ -4,17 +4,22 @@ import chai from 'chai';
 import sinon from 'sinon';
 import mockery from 'mockery';
 import Promise from 'pinkie-promise';
+import sinonChai from 'sinon-chai';
+import chaiAsPromised from 'chai-as-promised';
 const Schema = () => {};
 const expect = chai.expect;
 
-chai.use(require('sinon-chai'));
-chai.use(require('chai-as-promised'));
+chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 describe('mongoose-plugin-seed', () => {
   const execStub = sinon.stub().returns(Promise.resolve());
   const modelMock = name => {
     return {
       modelName: name,
+      collection: {
+        drop: sinon.stub().yields()
+      },
       create: sinon.stub().returnsArg(0),
       remove: sinon.stub().returns({exec: execStub})
     };
@@ -113,7 +118,8 @@ describe('mongoose-plugin-seed', () => {
 
     const BSeed = {
       dependencies: [CModel],
-      seed: sinon.stub().returns(Promise.resolve(BData))
+      seed: sinon.stub().returns(Promise.resolve(BData)),
+      drop: true
     };
 
     const BModel = modelMock('B', BSchema);
@@ -153,6 +159,10 @@ describe('mongoose-plugin-seed', () => {
 
     it('should call A seed with B and C', () => {
       expect(ASeed.seed).calledWithExactly(AData, BData);
+    });
+
+    it('should call B', () => {
+      expect(BModel.collection.drop).to.have.callCount(1);
     });
   });
 });

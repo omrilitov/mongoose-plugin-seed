@@ -2,18 +2,19 @@
 
 import {DepGraph} from 'dependency-graph';
 import mongoose from 'mongoose';
+import pify from 'pify';
 import Promise from 'pinkie-promise';
 
 const models = {};
 const info = {};
 
 const seedModel = function (Model, deps) {
-  const seed = info[Model.modelName].seed;
+  const modelInfo = info[Model.modelName];
+  const dropPromise = pify(Model.collection.drop.bind(Model.collection), Promise);
+  const removePromise = modelInfo.drop ? dropPromise() : Model.remove({}).exec();
 
-  return Model.remove({}).exec()
-    .then(() => {
-      return Model.create(seed(...deps));
-    });
+  return removePromise
+    .then(() => Model.create(modelInfo.seed(...deps)));
 };
 
 const getSchemasOrder = () => {
@@ -28,22 +29,22 @@ const getSchemasOrder = () => {
   return graph.overallOrder();
 };
 
-export function addSeed (Model, {seed, dependencies = []} = {}) {
+export function addSeed (Model, {drop = false, seed, dependencies = []} = {}) {
   if (!Model) {
     throw new TypeError('mongoose-plugin-seed: Model must be provided');
   }
-  else if (!seed) {
+  if (!seed) {
     throw new TypeError('mongoose-plugin-seed: seed function must be provided');
   }
-  else if (typeof seed !== 'function') {
+  if (typeof seed !== 'function') {
     throw new TypeError('mongoose-plugin-seed: seed must be a function');
   }
-  else if (!Array.isArray(dependencies)) {
+  if (!Array.isArray(dependencies)) {
     throw new TypeError('mongoose-plugin-seed: dependencies must be an array');
   }
 
   models[Model.modelName] = Model;
-  info[Model.modelName] = {dependencies: dependencies.map(model => model.modelName), seed};
+  info[Model.modelName] = {drop, dependencies: dependencies.map(model => model.modelName), seed};
 }
 
 export function createSeedModel (name, Schema, opts) {
