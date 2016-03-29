@@ -1,5 +1,3 @@
-'use strict';
-
 import runSequence from 'run-sequence';
 
 export default gulp => {

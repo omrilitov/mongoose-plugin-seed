@@ -1,5 +1,3 @@
-'use strict';
-
 import mocha from 'gulp-mocha';
 import istanbul from 'gulp-babel-istanbul';
 import mergeStream from 'merge-stream';

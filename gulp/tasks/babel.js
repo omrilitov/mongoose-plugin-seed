@@ -1,5 +1,3 @@
-'use strict';
-
 import config from '../config';
 import babel from 'gulp-babel';
 import sourcemaps from 'gulp-sourcemaps';

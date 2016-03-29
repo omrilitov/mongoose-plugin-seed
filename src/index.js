@@ -1,5 +1,3 @@
-'use strict';
-
 import {DepGraph} from 'dependency-graph';
 import mongoose from 'mongoose';
 import pify from 'pify';

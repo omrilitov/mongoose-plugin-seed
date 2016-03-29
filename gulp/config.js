@@ -1,5 +1,3 @@
-'use strict';
-
 export default {
   paths: {
     lib: './lib/**/*.js',

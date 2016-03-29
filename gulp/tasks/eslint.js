@@ -1,5 +1,3 @@
-'use strict';
-
 import config from '../config';
 import eslint from 'gulp-eslint';
 import gulpIf from 'gulp-if';
